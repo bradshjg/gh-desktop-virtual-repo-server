@@ -44,9 +44,16 @@ app.post('/fse', (req, res) => {
   const options = payload.options
 
   // @ts-ignore this is a hack
-  const result = FSE[fn](...args)
+  let result = FSE[fn](...args)
 
-  result.then( (result: any) => res.json({ result: result }) )
+  result.then( (result: any) => {
+    switch (fn) {
+      case 'readFile':
+        result = result.toString()
+        break
+    }
+    res.json({ result: result })
+  })
 });
 
 app.listen(PORT, () => {
