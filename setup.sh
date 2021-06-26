@@ -8,6 +8,7 @@ curl -sL https://deb.nodesource.com/setup_12.x | sudo bash -
 
 apt update
 apt install -y git/buster-backports
+apt install -y nodejs
 apt install -y yarn
 
 yarn install
