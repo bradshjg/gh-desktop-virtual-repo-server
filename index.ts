@@ -31,11 +31,6 @@ app.post('/git', (req, res) => {
       stderr: stderr
     }
 
-    if (result.error?.code === 128) {
-      console.log(JSON.stringify(payload, null, 4))
-      console.log(JSON.stringify(result, null, 4))
-    }
-
     // send response
     res.json(result)
   })
