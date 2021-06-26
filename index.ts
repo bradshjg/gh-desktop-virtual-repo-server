@@ -18,6 +18,9 @@ app.post('/git', (req, res) => {
   const payload = req.body
   const stdin = payload.options?.stdin
 
+  // HACK HACK HACK replace environment until we do a better job of handling this
+  payload.options.env = process.env
+
   const spawnedProcess = execFile('git', payload.args, payload.options, (error, stdout, stderr) => {
     // send response
     res.json({
