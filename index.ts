@@ -9,8 +9,6 @@ app.use(express.json())
 
 const PORT = 9195;
 
-type Callable = { (...args: any[]): any }
-
 app.get('/', (req, res) => {
   res.send('OK')
 });
@@ -19,8 +17,6 @@ app.get('/', (req, res) => {
 app.post('/git', (req, res) => {
   const payload = req.body
   const stdin = payload.options?.stdin
-
-  console.log(payload)
 
   const spawnedProcess = execFile('git', payload.args, payload.options, (error, stdout, stderr) => {
     // send response
