@@ -19,15 +19,25 @@ app.post('/git', (req, res) => {
   const stdin = payload.options?.stdin
 
   // HACK HACK HACK replace environment until we do a better job of handling this
-  payload.options.env = process.env
+  // right now we are hackily getting only the capitalized environment variables
+  // in the environment of the remote server.
+  const osEnvEntries = Object.entries(process.env)
+  payload.env = Object.fromEntries(osEnvEntries.filter(([key, value]) => key.toUpperCase() === key))
 
   const spawnedProcess = execFile('git', payload.args, payload.options, (error, stdout, stderr) => {
-    // send response
-    res.json({
+    const result = {
       error: error,
       stdout: stdout,
       stderr: stderr
-    })
+    }
+
+    if (result.error?.code === 128) {
+      console.log(JSON.stringify(payload, null, 4))
+      console.log(JSON.stringify(result, null, 4))
+    }
+
+    // send response
+    res.json(result)
   })
   if (stdin) {
     const stdinStream = new Readable()
