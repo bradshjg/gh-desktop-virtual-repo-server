@@ -20,9 +20,9 @@ app.post('/git', (req, res) => {
 
   // HACK HACK HACK replace environment until we do a better job of handling this
   // right now we are hackily getting only the capitalized environment variables
-  // in the environment of the remote server.
+  // in the environment of the remote server so it's less Node-noisy.
   const osEnvEntries = Object.entries(process.env)
-  payload.env = Object.fromEntries(osEnvEntries.filter(([key, value]) => key.toUpperCase() === key))
+  payload.options.env = Object.fromEntries(osEnvEntries.filter(([key, value]) => key.toUpperCase() === key))
 
   const spawnedProcess = execFile('git', payload.args, payload.options, (error, stdout, stderr) => {
     const result = {
@@ -61,6 +61,8 @@ app.post('/fse', (req, res) => {
         break
     }
     res.json({ result: result })
+  }).catch( (result: any) => {
+    console.log(result.toString())
   })
 });
 
